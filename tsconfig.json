@@ -9,7 +9,7 @@
     "strict": true,
     "noImplicitAny": true,
 
-    "strictPropertyInitialization": false,
+    "strictPropertyInitialization":  ,
 
     "moduleResolution": "node",
     "baseUrl": ".",
