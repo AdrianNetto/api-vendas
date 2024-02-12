@@ -22,7 +22,12 @@ class SendForgotPasswordEmailService {
 
     const { token } = await userTokenRepository.generate(user.id);
 
-    const forgotPasswordTemplate = path.resolve(__dirname, '..', 'views', 'forgot_password.hbs')
+    const forgotPasswordTemplate = path.resolve(
+      __dirname,
+      '..',
+      'views',
+      'forgot_password.hbs',
+    );
 
     await EtherealMail.sendMail({
       to: {
@@ -34,7 +39,7 @@ class SendForgotPasswordEmailService {
         file: forgotPasswordTemplate,
         variables: {
           name: user.name,
-          token: token,
+          link: `http://localhost:8888/reset-password?token=${token}`
         },
       },
     });
