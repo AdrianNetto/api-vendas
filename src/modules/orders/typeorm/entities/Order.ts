@@ -1,6 +1,5 @@
 import Customer from '@modules/customers/typeorm/entities/Customer';
 import {
-  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
