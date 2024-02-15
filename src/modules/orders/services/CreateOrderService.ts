@@ -1,10 +1,10 @@
-import { getCustomRepository } from 'typeorm';
-import { OrdersRepository } from '../typeorm/repositories/OrdersRepository';
-import AppError from '@shared/errors/AppError';
-import Product from '../typeorm/entities/Order';
-import Order from '../typeorm/entities/Order';
+
 import CustomersRepository from '@modules/customers/typeorm/repositories/CustomersRepository';
-import { ProductRepository } from '@modules/products/typeorm/repositories/ProductsRepository';
+import ProductRepository from '@modules/products/typeorm/repositories/ProductsRepository';
+import AppError from '@shared/errors/AppError';
+import { getCustomRepository } from 'typeorm';
+import Order from '../typeorm/entities/Order';
+import OrdersRepository from '../typeorm/repositories/OrdersRepository';
 
 interface IProduct {
   id: string;
@@ -54,7 +54,8 @@ class CreateOrderService {
 
     if (quantityAvailable.length) {
       throw new AppError(
-        `The quantity ${quantityAvailable[0].quantity} is not available for ${quantityAvailable[0].id}.`,
+        `The quantity ${quantityAvailable[0].quantity}
+         is not available for ${quantityAvailable[0].id}.`,
       );
     }
 

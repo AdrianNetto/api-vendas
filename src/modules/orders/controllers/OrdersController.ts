@@ -20,7 +20,7 @@ export default class OrdersController {
 
     const order = await createOrder.execute({
       customer_id,
-      products
+      products,
     });
 
     return response.json(order);

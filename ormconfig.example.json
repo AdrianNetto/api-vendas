@@ -5,9 +5,10 @@
   "username": "postgres",
   "password": "docker",
   "database": "apivendas",
-  "migrations": ["src/shared/typeorm/migrations/*.ts"],
-  "entities": ["./src/modules/**/typeorm/entities/*.ts"],
+  "migrations": ["./src/shared/typeorm/migrations/*.(ts|js)"],
+  "entities": ["./src/modules/**/typeorm/entities/*.(ts|js)"],
   "cli": {
-    "migrationsDir": "src/shared/typeorm/migrations"
+    "migrationsDir": "./src/shared/typeorm/migrations"
   }
 }
+

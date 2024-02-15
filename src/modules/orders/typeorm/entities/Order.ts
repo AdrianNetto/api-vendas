@@ -1,4 +1,4 @@
-import Customer from '@modules/customers/typeorm/entities/Customer';
+// Order.ts
 import {
   CreateDateColumn,
   Entity,
@@ -8,6 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import Customer from '@modules/customers/typeorm/entities/Customer';
+
 import OrdersProducts from './OrderProducts';
 
 @Entity('orders')
@@ -20,7 +23,7 @@ class Order {
   customer: Customer;
 
   @OneToMany(() => OrdersProducts, order_products => order_products.order, {
-    cascade: true
+    cascade: true,
   })
   order_products: OrdersProducts[];
 
