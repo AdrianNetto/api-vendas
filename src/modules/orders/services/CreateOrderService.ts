@@ -53,8 +53,6 @@ class CreateOrderService {
         product.quantity,
     );
 
-    console.log(quantityAvailable)
-
     if (quantityAvailable.length) {
       throw new AppError(
         `The quantity ${quantityAvailable[0].quantity}
