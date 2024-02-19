@@ -29,6 +29,7 @@ export class OrdersRepository extends Repository<Order> {
       order_products: products,
     });
 
+
     await this.save(order);
 
     return order

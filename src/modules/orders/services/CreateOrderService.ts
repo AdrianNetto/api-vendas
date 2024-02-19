@@ -5,6 +5,7 @@ import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
 import Order from '../typeorm/entities/Order';
 import OrdersRepository from '../typeorm/repositories/OrdersRepository';
+import { error } from 'console';
 
 interface IProduct {
   id: string;
@@ -52,6 +53,8 @@ class CreateOrderService {
         product.quantity,
     );
 
+    console.log(quantityAvailable)
+
     if (quantityAvailable.length) {
       throw new AppError(
         `The quantity ${quantityAvailable[0].quantity}
@@ -65,6 +68,7 @@ class CreateOrderService {
       price: existsProducts.filter(p => p.id === product.id)[0].price,
     }));
 
+
     const order = await ordersRepository.createOrder({
       customer: customerExists,
       products: serializedProducts,
@@ -75,7 +79,7 @@ class CreateOrderService {
     const updatedProductQuantity = order_products.map(product => ({
       id: product.product_id,
       quantity:
-        existsProducts.filter(p => p.id === product.id)[0].quantity -
+        existsProducts.filter(p => p.id === product.product_id)[0].quantity -
         product.quantity,
     }));
 
