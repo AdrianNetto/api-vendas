@@ -1,3 +1,4 @@
+
 import {
   MigrationInterface,
   QueryRunner,
@@ -6,8 +7,7 @@ import {
 } from 'typeorm';
 
 export class AddOrderIdToOrdersProducts1708001721676
-  implements MigrationInterface
-{
+  implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
       'orders_products',
@@ -31,7 +31,7 @@ export class AddOrderIdToOrdersProducts1708001721676
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('order_products', 'OrdersProductsOrder');
+    await queryRunner.dropForeignKey('orders_products', 'OrdersProductsOrder');
     await queryRunner.dropColumn('orders_products', 'order_id');
   }
 }
