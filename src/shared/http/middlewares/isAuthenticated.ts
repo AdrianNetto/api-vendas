@@ -1,6 +1,6 @@
 import AppError from '@shared/errors/AppError';
 import { Request, Response, NextFunction } from 'express';
-import { verify } from 'jsonwebtoken';
+import { verify, Secret } from 'jsonwebtoken';
 import authConfig from '@config/auth';
 
 interface ITokenPayload {
@@ -22,8 +22,14 @@ export default function isAuthenticated(
 
   const [, token] = authHeader.split(' ');
 
+  const secret = authConfig.jwt.secret;
+
+  if (secret === undefined) {
+    throw new Error('JWT secret is missing in configuration');
+  }
+
   try {
-    const decodedToken = verify(token, authConfig.jwt.secret);
+    const decodedToken = verify(token, secret as Secret);
 
     const { sub } = decodedToken as ITokenPayload;
 
