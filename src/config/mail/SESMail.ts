@@ -1,7 +1,12 @@
 import nodemailer from 'nodemailer';
 import aws from 'aws-sdk';
-import handlebarsmailTemplate from './HandelbarsMailTemplate';
+import HandlebarsMailTemplate from './HandelbarsMailTemplate';
 import mailConfig from '@config/mail/mail';
+
+interface IMailContact {
+  name: string;
+  email: string;
+}
 
 interface ITemplateVariable {
   [key: string]: string | number;
@@ -12,11 +17,6 @@ interface IParseMailTemplate {
   variables: ITemplateVariable;
 }
 
-interface IMailContact {
-  name: string;
-  email: string;
-}
-
 interface ISendMail {
   to: IMailContact;
   from?: IMailContact;
@@ -25,13 +25,14 @@ interface ISendMail {
 }
 
 export default class SESMail {
+
   static async sendMail({
     to,
     from,
     subject,
     templateData,
   }: ISendMail): Promise<void> {
-    const mailTemplate = new handlebarsmailTemplate();
+    const mailTemplate = new HandlebarsMailTemplate();
 
     const transporter = nodemailer.createTransport({
       SES: new aws.SES({
@@ -50,7 +51,7 @@ export default class SESMail {
         name: to.name,
         address: to.email,
       },
-      subject: subject,
+      subject,
       html: await mailTemplate.parse(templateData),
     });
   }
