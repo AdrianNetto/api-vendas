@@ -1,11 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import aws, { S3 } from 'aws-sdk';
-import mime from 'mime';
-import uploadConfig from '@config/upload';
-import { promises } from 'dns';
+import upload from '@config/upload';
+import mimeTypes from 'mime-types';
 
-export default class DiskSotirageProvider {
+export default class S3StorageProvider {
   private client: S3;
 
   constructor() {
@@ -13,20 +12,19 @@ export default class DiskSotirageProvider {
       region: 'us-east-1',
     });
   }
+
   public async saveFile(file: string): Promise<string> {
-    const originlPath = path.resolve(uploadConfig.tmpFolder, file);
+    const originalPath = path.resolve(upload.tmpFolder, file);
 
-    const ContentType = mime.getType(originlPath);
+    const ContentType = mimeTypes.lookup(originalPath);
 
-    if (!ContentType) {
-      throw new Error('File not found :(');
-    }
+    if (!ContentType) throw new Error('File not found');
 
-    const fileContent = fs.promises.readFile(originlPath);
+    const fileContent = await fs.promises.readFile(originalPath);
 
     await this.client
       .putObject({
-        Bucket: uploadConfig.config.aws.bucket,
+        Bucket: upload.config.aws.bucket,
         Key: file,
         ACL: 'public-read',
         Body: fileContent,
@@ -34,15 +32,17 @@ export default class DiskSotirageProvider {
       })
       .promise();
 
-    await fs.promises.unlink(originlPath);
+    await fs.promises.unlink(originalPath);
 
     return file;
   }
 
   public async deleteFile(file: string): Promise<void> {
-    await this.client.deleteObject({
-      Bucket: uploadConfig.config.aws.bucket,
-      Key: file,
-    }).promise();
+    await this.client
+      .deleteObject({
+        Bucket: upload.config.aws.bucket,
+        Key: file,
+      })
+      .promise();
   }
 }
