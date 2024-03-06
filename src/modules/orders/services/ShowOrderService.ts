@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
-import { OrdersRepository } from '../typeorm/repositories/OrdersRepository';
+import { OrdersRepository } from '../infra/http/typeorm/repositories/OrdersRepository';
 import AppError from '@shared/errors/AppError';
-import Order from '../typeorm/entities/Order';
+import Order from '../infra/http/typeorm/entities/Order';
 
 interface IProduct {
   id: string;
