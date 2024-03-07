@@ -6,6 +6,7 @@ import cors from 'cors';
 import routes from './routes';
 import AppError from '@shared/errors/AppError';
 import '@shared/typeorm';
+import '@shared/containers/index'
 import { errors } from 'celebrate';
 import { pagination } from 'typeorm-pagination';
 import uploadConfig from '@config/upload';
