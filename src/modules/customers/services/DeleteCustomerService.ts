@@ -1,19 +1,18 @@
-import { getCustomRepository } from 'typeorm';
 import CustomersRepository from '../infra/typeorm/repositories/CustomersRepository';
 import AppError from '@shared/errors/AppError';
-import { inject, injectable } from 'tsyringe';
-
-interface IRequest {
-  id: string;
-}
-
+import { container, inject, injectable } from 'tsyringe';
+import { IDeleteCustomer } from '../domain/models/IDeleteCustomer';
+import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
 @injectable()
 class DeleteProductService {
-  @inject('CustomersRepository')
-  public async execute({ id }: IRequest): Promise<void> {
-    const customersRepository = getCustomRepository(CustomersRepository);
+  constructor(
+    @inject('CustomersRepository')
+    private customersRepository: ICustomersRepository,
+  ) {}
+  public async execute({ id }: IDeleteCustomer): Promise<void> {
+    const customersRepository = container.resolve(CustomersRepository);
 
-    const customer = await customersRepository.findOne(id);
+    const customer = await customersRepository.findById(id);
 
     if (!customer) {
       throw new AppError('Product not found');
