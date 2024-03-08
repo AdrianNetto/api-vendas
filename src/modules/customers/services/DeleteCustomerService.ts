@@ -18,7 +18,7 @@ class DeleteProductService {
       throw new AppError('Product not found');
     }
 
-    await customersRepository.remove(customer);
+    await this.customersRepository.remove(customer);
   }
 }
 
