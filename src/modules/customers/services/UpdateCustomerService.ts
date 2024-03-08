@@ -1,21 +1,23 @@
-import { getCustomRepository } from 'typeorm';
+import { IUpdateCustomer } from '../domain/models/IUpdateCustomer';
+import { inject, injectable } from 'tsyringe';
 import CustomersRepository from '../infra/typeorm/repositories/CustomersRepository';
 import AppError from '@shared/errors/AppError';
 import Customer from '../infra/typeorm/entities/Customer';
+import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
 
-interface IRequest {
-  id: string;
-  name: string;
-  email: string;
-}
-
+@injectable()
 class UpdateProductService {
-  public async execute({ id, name, email }: IRequest): Promise<Customer> {
-    const customerRepository = getCustomRepository(CustomersRepository);
+  constructor(
+    private customersRepository: ICustomersRepository
+  ) {}
 
-    const customer = await customerRepository.findOneOrFail(id);
-
-    const productWithSameName = await customerRepository.findByName(name);
+  public async execute({
+    id,
+    name,
+    email,
+  }: IUpdateCustomer): Promise<Customer> {
+    const customer = await this.customersRepository.findById(id);
+    const productWithSameName = await this.customersRepository.findByName(name);
 
     if (!customer) {
       throw new AppError('Product not found');
@@ -28,7 +30,7 @@ class UpdateProductService {
     customer.name = name;
     customer.email = email;
 
-    await customerRepository.save(customer);
+    await this.customersRepository.save(customer);
 
     return customer;
   }
