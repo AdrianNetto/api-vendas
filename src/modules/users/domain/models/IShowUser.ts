@@ -1,3 +1,4 @@
-export interface ISendForgotPasswordEmail {
-  email: string;
+
+export interface IShowUser {
+  user_id: string;
 }
