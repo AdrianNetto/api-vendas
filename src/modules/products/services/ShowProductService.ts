@@ -1,6 +1,6 @@
 
 import AppError from '@shared/errors/AppError';
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import { IProduct } from '../domain/models/IProduct';
 import { IShowProduct } from '../domain/models/IShowProduct';
 import { IProductsRepository } from '../domain/models/IProductRepository';
@@ -8,6 +8,7 @@ import { IProductsRepository } from '../domain/models/IProductRepository';
 @injectable()
 class ShowProductService {
   constructor(
+    @inject('ProductsRepository')
     private productsRepository: IProductsRepository
   ) {}
 

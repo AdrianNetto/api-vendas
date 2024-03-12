@@ -1,22 +1,22 @@
-import { getCustomRepository } from 'typeorm';
-import { ProductRepository } from '../infra/typeorm/repositories/ProductsRepository';
 import AppError from '@shared/errors/AppError';
-import Product from '../infra/typeorm/entities/Product';
 import redisCache from '@shared/cache/RedisCache';
-interface IRequest {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
+import { inject, injectable } from 'tsyringe';
+import { IUpdateProduct } from '../domain/models/IUpdateProduct';
+import { IProduct } from '../domain/models/IProduct';
+import { IProductsRepository } from '../domain/models/IProductRepository';
 
+@injectable()
 class UpdateProductService {
-  public async execute({ id, name, price, quantity }: IRequest): Promise<Product> {
-    const productsRepository = getCustomRepository(ProductRepository);
+  constructor(
+    @inject('ProductsRepository')
+    private productsRepository: IProductsRepository
+  ) {}
 
-    const product = await productsRepository.findOneOrFail(id);
+  public async execute({ id, name, price, quantity }: IUpdateProduct): Promise<IProduct> {
 
-    const productWithSameName = await productsRepository.findByName(name);
+    const product = await this.productsRepository.findById(id);
+
+    const productWithSameName = await this.productsRepository.findByName(name);
 
     if (!product) {
       throw new AppError('Product not found');
@@ -32,7 +32,7 @@ class UpdateProductService {
     product.price = price;
     product.quantity = quantity;
 
-    await productsRepository.save(product);
+    await this.productsRepository.save(product);
 
     return product;
   }
