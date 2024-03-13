@@ -57,3 +57,5 @@ class UpdateProfileService {
     }
   }
 }
+
+export default UpdateProfileService
