@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, getRepository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import Customer from '../entities/Customer';
 import { ICustomersRepository } from '@modules/customers/domain/repositories/ICustomersRepository';
 import { ICreateCustomer } from '@modules/customers/domain/models/ICreateCustomer';
