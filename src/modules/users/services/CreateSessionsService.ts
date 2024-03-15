@@ -1,20 +1,19 @@
+import { inject, injectable } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import { sign, Secret } from 'jsonwebtoken';
 import authConfig from '@config/auth';
-import { inject, injectable } from 'tsyringe';
-import { IUsersRepository } from '../domain/models/IUsersRepository';
 import { ICreateSession } from '../domain/models/ICreateSession';
 import { IUserAuthenticated } from '../domain/models/IUserAuthencidated';
+import { IUsersRepository } from '../domain/models/IUsersRepository';
 import { IHashProvider } from '../providers/HashProvider/models/IHashProvider';
 
 @injectable()
 class CreateSessionsService {
-
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
     @inject('HashProvider')
-    private hashProvider: IHashProvider
+    private hashProvider: IHashProvider,
   ) {}
 
   public async execute({
@@ -24,13 +23,16 @@ class CreateSessionsService {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('Incorrect email or password', 401);
+      throw new AppError('Incorrect email/password combination.', 401);
     }
 
-    const passwordConfirmed = await this.hashProvider.compareHash(password, user.password);
+    const passwordConfirmed = await this.hashProvider.compareHash(
+      password,
+      user.password,
+    );
 
     if (!passwordConfirmed) {
-      throw new AppError('Incorrect email or password', 401);
+      throw new AppError('Incorrect email/password combination.', 401);
     }
 
     const token = sign({}, authConfig.jwt.secret as Secret, {
